@@ -17,7 +17,7 @@ test('core', () => {
 
 test('directiveFromMarkdown', () => {
   assert.deepEqual(
-    fromMarkdown('a :b[c]{d} e.', {
+    fromMarkdown('a @b[c]{d} e.', {
       extensions: [directive()],
       mdastExtensions: [directiveFromMarkdown]
     }).children[0],
@@ -69,7 +69,7 @@ test('directiveFromMarkdown', () => {
   )
 
   assert.deepEqual(
-    fromMarkdown('::a[b]{c}', {
+    fromMarkdown('@@a[b]{c}', {
       extensions: [directive()],
       mdastExtensions: [directiveFromMarkdown]
     }).children[0],
@@ -96,7 +96,7 @@ test('directiveFromMarkdown', () => {
   )
 
   assert.deepEqual(
-    fromMarkdown(':::a[b]{c}\nd', {
+    fromMarkdown('@@@a[b]{c}\nd', {
       extensions: [directive()],
       mdastExtensions: [directiveFromMarkdown]
     }).children[0],
@@ -151,7 +151,7 @@ test('directiveFromMarkdown', () => {
 
   assert.deepEqual(
     removePosition(
-      fromMarkdown(':a[b *c*\nd]', {
+      fromMarkdown('@a[b *c*\nd]', {
         extensions: [directive()],
         mdastExtensions: [directiveFromMarkdown]
       }),
@@ -182,7 +182,7 @@ test('directiveFromMarkdown', () => {
 
   assert.deepEqual(
     removePosition(
-      fromMarkdown(':a{#b.c.d e=f g="h&amp;i&unknown;j"}', {
+      fromMarkdown('@a{#b.c.d e=f g="h&amp;i&unknown;j"}', {
         extensions: [directive()],
         mdastExtensions: [directiveFromMarkdown]
       }),
@@ -209,7 +209,7 @@ test('directiveFromMarkdown', () => {
 
   assert.deepEqual(
     removePosition(
-      fromMarkdown(':a{b=&param c="&param" d=\'&param\'}', {
+      fromMarkdown('@a{b=&param c="&param" d=\'&param\'}', {
         extensions: [directive()],
         mdastExtensions: [directiveFromMarkdown]
       }),
@@ -236,7 +236,7 @@ test('directiveFromMarkdown', () => {
 
   assert.deepEqual(
     removePosition(
-      fromMarkdown(':a{b\nc="d\ne"}', {
+      fromMarkdown('@a{b\nc="d\ne"}', {
         extensions: [directive()],
         mdastExtensions: [directiveFromMarkdown]
       }),
@@ -263,7 +263,7 @@ test('directiveFromMarkdown', () => {
 
   assert.deepEqual(
     removePosition(
-      fromMarkdown('::::a\n:::b\n:c\n:::\n::::', {
+      fromMarkdown('@@@@a\n@@@b\n@c\n@@@\n@@@@', {
         extensions: [directive()],
         mdastExtensions: [directiveFromMarkdown]
       }),
@@ -317,7 +317,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a : b.\n',
+    'a @ b.\n',
     'should try to serialize a directive (text) w/o `name`'
   )
 
@@ -334,7 +334,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b c.\n',
+    'a @b c.\n',
     'should serialize a directive (text) w/ `name`'
   )
 
@@ -354,7 +354,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b[c] d.\n',
+    'a @b[c] d.\n',
     'should serialize a directive (text) w/ `children`'
   )
 
@@ -374,7 +374,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b[c\\[d\\]e] f.\n',
+    'a @b[c\\[d\\]e] f.\n',
     'should escape brackets in a directive (text) label'
   )
 
@@ -394,7 +394,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b[c\nd] e.\n',
+    'a @b[c\nd] e.\n',
     'should support EOLs in a directive (text) label'
   )
 
@@ -416,7 +416,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b{c="d" e="f" g j="2"} k.\n',
+    'a @b{c="d" e="f" g j="2"} k.\n',
     'should serialize a directive (text) w/ `attributes`'
   )
 
@@ -437,7 +437,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b{#d .a.b.c key="value"} k.\n',
+    'a @b{#d .a.b.c key="value"} k.\n',
     'should serialize a directive (text) w/ `id`, `class` attributes'
   )
 
@@ -458,7 +458,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b{x="y&#x22;\'\r\nz"} k.\n',
+    'a @b{x="y&#x22;\'\r\nz"} k.\n',
     'should encode the quote in an attribute value (text)'
   )
 
@@ -479,7 +479,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b{x="y&#x22;\'\r\nz"} k.\n',
+    'a @b{x="y&#x22;\'\r\nz"} k.\n',
     'should encode the quote in an attribute value (text)'
   )
 
@@ -500,7 +500,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b{id="c#d"} e.\n',
+    'a @b{id="c#d"} e.\n',
     'should not use the `id` shortcut if impossible characters exist'
   )
 
@@ -521,7 +521,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b{class="c.d e<f"} g.\n',
+    'a @b{class="c.d e<f"} g.\n',
     'should not use the `class` shortcut if impossible characters exist'
   )
 
@@ -542,14 +542,14 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a :b{.e.hij class="c.d f<g"} k.\n',
+    'a @b{.e.hij class="c.d f<g"} k.\n',
     'should not use the `class` shortcut if impossible characters exist (but should use it for classes that don’t)'
   )
 
   assert.deepEqual(
     // @ts-expect-error: `children`, `name` missing.
     toMarkdown({type: 'leafDirective'}, {extensions: [directiveToMarkdown]}),
-    '::\n',
+    '@@\n',
     'should try to serialize a directive (leaf) w/o `name`'
   )
 
@@ -559,7 +559,7 @@ test('directiveToMarkdown', () => {
       {type: 'leafDirective', name: 'a'},
       {extensions: [directiveToMarkdown]}
     ),
-    '::a\n',
+    '@@a\n',
     'should serialize a directive (leaf) w/ `name`'
   )
 
@@ -572,7 +572,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '::a[b]\n',
+    '@@a[b]\n',
     'should serialize a directive (leaf) w/ `children`'
   )
 
@@ -585,7 +585,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '::a[b]\n',
+    '@@a[b]\n',
     'should serialize a directive (leaf) w/ `children`'
   )
 
@@ -598,7 +598,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '::a[b&#xA;c]\n',
+    '@@a[b&#xA;c]\n',
     'should serialize a directive (leaf) w/ EOLs in `children`'
   )
 
@@ -612,7 +612,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '::a{#b .c.d key="e&#xA;f"}\n',
+    '@@a{#b .c.d key="e&#xA;f"}\n',
     'should serialize a directive (leaf) w/ EOLs in `attributes`'
   )
 
@@ -622,7 +622,7 @@ test('directiveToMarkdown', () => {
       {type: 'containerDirective'},
       {extensions: [directiveToMarkdown]}
     ),
-    ':::\n:::\n',
+    '@@@\n@@@\n',
     'should try to serialize a directive (container) w/o `name`'
   )
 
@@ -632,7 +632,7 @@ test('directiveToMarkdown', () => {
       {type: 'containerDirective', name: 'a'},
       {extensions: [directiveToMarkdown]}
     ),
-    ':::a\n:::\n',
+    '@@@a\n@@@\n',
     'should serialize a directive (container) w/ `name`'
   )
 
@@ -645,7 +645,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':::a\nb\n:::\n',
+    '@@@a\nb\n@@@\n',
     'should serialize a directive (container) w/ `children`'
   )
 
@@ -660,7 +660,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':::a\n# b\n:::\n',
+    '@@@a\n# b\n@@@\n',
     'should serialize a directive (container) w/ `children` (heading)'
   )
 
@@ -675,7 +675,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':::a\nb\nc\n:::\n',
+    '@@@a\nb\nc\n@@@\n',
     'should serialize a directive (container) w/ EOLs in `children`'
   )
 
@@ -689,7 +689,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':::a{#b .c.d key="e&#xA;f"}\n:::\n',
+    '@@@a{#b .c.d key="e&#xA;f"}\n@@@\n',
     'should serialize a directive (container) w/ EOLs in `attributes`'
   )
 
@@ -708,7 +708,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':::a[b]\n:::\n',
+    '@@@a[b]\n@@@\n',
     'should serialize the first paragraph w/ `data.directiveLabel` as a label in a directive (container)'
   )
 
@@ -732,7 +732,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '::::a\n:::b\nc\n:::\n::::\n',
+    '@@@@a\n@@@b\nc\n@@@\n@@@@\n',
     'should serialize the outer containers w/ more colons than inner containers'
   )
 
@@ -766,7 +766,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '::::a\n:::b\nc\n:::\n\n:::d\ne\n:::\n::::\n',
+    '@@@@a\n@@@b\nc\n@@@\n\n@@@d\ne\n@@@\n@@@@\n',
     'should serialize w/ `3 + nesting`, not the total count (1)'
   )
 
@@ -796,7 +796,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':::::a\n::::b\n:::c\nd\n:::\n::::\n:::::\n',
+    '@@@@@a\n@@@@b\n@@@c\nd\n@@@\n@@@@\n@@@@@\n',
     'should serialize w/ `3 + nesting`, not the total count (2)'
   )
 
@@ -825,7 +825,7 @@ test('directiveToMarkdown', () => {
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '::::a\n> :::b\n> c\n> :::\n::::\n',
+    '@@@@a\n> @@@b\n> c\n> @@@\n@@@@\n',
     'should serialize w/ `3 + nesting`, not the total count (3)'
   )
 
@@ -833,96 +833,96 @@ test('directiveToMarkdown', () => {
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: 'a:b'}]
+        children: [{type: 'text', value: 'a@b'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a\\:b\n',
-    'should escape a `:` in phrasing when followed by an alpha'
+    'a\\@b\n',
+    'should escape a `@` in phrasing when followed by an alpha'
   )
 
   assert.deepEqual(
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: 'a:9'}]
+        children: [{type: 'text', value: 'a@9'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a:9\n',
-    'should not escape a `:` in phrasing when followed by a non-alpha'
+    'a@9\n',
+    'should not escape a `@` in phrasing when followed by a non-alpha'
   )
 
   assert.deepEqual(
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: 'a::c'}]
+        children: [{type: 'text', value: 'a@@c'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    'a::c\n',
-    'should not escape a `:` in phrasing when preceded by a colon'
+    'a@@c\n',
+    'should not escape a `@` in phrasing when preceded by a colon'
   )
 
   assert.deepEqual(
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: ':\na'}]
+        children: [{type: 'text', value: '@\na'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':\na\n',
-    'should not escape a `:` at a break'
+    '@\na\n',
+    'should not escape a `@` at a break'
   )
 
   assert.deepEqual(
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: ':a'}]
+        children: [{type: 'text', value: '@a'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '\\:a\n',
-    'should not escape a `:` at a break when followed by an alpha'
+    '\\@a\n',
+    'should not escape a `@` at a break when followed by an alpha'
   )
 
   assert.deepEqual(
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: '::\na'}]
+        children: [{type: 'text', value: '@@\na'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '\\::\na\n',
-    'should escape a `:` at a break when followed by a colon'
+    '\\@@\na\n',
+    'should escape a `@` at a break when followed by a colon'
   )
 
   assert.deepEqual(
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: ':::\na'}]
+        children: [{type: 'text', value: '@@@\na'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '\\:::\na\n',
-    'should escape a `:` at a break when followed by two colons'
+    '\\@@@\na\n',
+    'should escape a `@` at a break when followed by two colons'
   )
 
   assert.deepEqual(
     toMarkdown(
       {
         type: 'paragraph',
-        children: [{type: 'text', value: ':::\na'}]
+        children: [{type: 'text', value: '@@@\na'}]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    '\\:::\na\n',
-    'should escape a `:` at a break when followed by two colons'
+    '\\@@@\na\n',
+    'should escape a `@` at a break when followed by two colons'
   )
 
   assert.deepEqual(
@@ -931,12 +931,12 @@ test('directiveToMarkdown', () => {
         type: 'paragraph',
         children: [
           {type: 'textDirective', name: 'red', children: []},
-          {type: 'text', value: ':'}
+          {type: 'text', value: '@'}
         ]
       },
       {extensions: [directiveToMarkdown]}
     ),
-    ':red:\n',
-    'should escape a `:` after a text directive'
+    '@red@\n',
+    'should escape a `@` after a text directive'
   )
 })
