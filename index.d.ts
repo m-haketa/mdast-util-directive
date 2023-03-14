@@ -18,7 +18,7 @@ interface DirectiveFields {
    * Directive attributes.
    */
   // eslint-disable-next-line @typescript-eslint/ban-types
-  attributes?: Record<string, string | null | undefined> | null | undefined
+  attributes?: Record<string, string>
 }
 
 /**
